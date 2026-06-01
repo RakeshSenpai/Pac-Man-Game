@@ -6,6 +6,17 @@ const boardWidth = columnCount*tileSize;
 const boardHeight = rowCount*tileSize;
 let context;
 
+let blueGhostImage;
+let orrangeGhostImage;
+let pinkGhostImage;
+let redGhostImage;
+let scaredGhostImage;
+let pacmanUpImage;
+let pacmanDownImage;
+let pacmanLeftImage;
+let pacmanRightImage;
+let wallImage;
+
 window.onload = function(){
     board = document.getElementById("board")
     board.height = boardHeight;

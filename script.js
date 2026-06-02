@@ -54,6 +54,10 @@ const tileMap = [
 ];
 
 
+const walls = new Set();
+const foods = new Set();
+const ghosts = new Set();
+const pacman;
 
 
 function laodImages(){
@@ -80,3 +84,44 @@ function laodImages(){
     pacmanRightImage.src = './assets/image/pacmanRight.png';
 
 }
+
+
+function laodMap(){
+    walls.clear();
+    foods.clear();
+    ghosts.clear();
+
+    for(let r = 0; r < rowCount ; r++){
+        for(let c = 0; c < columnCount; c++){
+            const row = tileMap[r]
+            const tileMapChar = row[c]
+
+            const x = c*tileSize;
+            const y = r*tileSize;
+
+            if(tileMapChar == "X"){
+                const wall = new Block(wallImage, x, y, tileSize, tileSize)
+                walls.add(add)
+            }
+            else if(tileMapChar == "b"){
+                const ghost = new Block(blueGhostImage, x, y, tileSize, tileSize)
+                ghosts
+            }
+        }
+    }
+}
+
+class Block{
+    constructor(image, x, y, height, width){
+        this.image = image;
+         this.x = x
+         this.y = y;
+
+         this.height = height;
+         this.width = width;
+
+         this.startX = x;
+         this.startY = y;
+    }
+}
+

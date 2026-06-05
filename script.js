@@ -24,6 +24,9 @@ window.onload = function(){
     context = board.getContext("2d")
 
     laodImages()
+    laodMap()
+    update()
+    // console.log(walls.size)
 }
 
 
@@ -57,7 +60,7 @@ const tileMap = [
 const walls = new Set();
 const foods = new Set();
 const ghosts = new Set();
-const pacman;
+let pacman;
 
 
 function laodImages(){
@@ -67,7 +70,7 @@ function laodImages(){
     blueGhostImage = new Image();
     blueGhostImage.src = './assets/image/blueGhost.png';
     orrangeGhostImage = new Image();
-    orrangeGhostImage.src = './assets/image/orrangeGhostImage';
+    orrangeGhostImage.src = './assets/image/orangeGhost.png';
     pinkGhostImage = new Image();
     pinkGhostImage.src = './assets/image/pinkGhost.png';
     redGhostImage = new Image();
@@ -125,9 +128,32 @@ function laodMap(){
             }
 
             else if(tileMapChar == " "){
-                const food = new Block(null)
+                const food = new Block(null, x + 14, y + 14, 4, 4)
+                foods.add(food)
             }
         }
+    }
+}
+
+
+
+function update(){
+    draw();
+    setTimeout(update, 50)
+}
+
+function draw(){
+    context.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height)
+    for(let ghost of ghosts.values()){
+        context.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height)
+    }
+    for(let wall of walls.values()){
+        context.drawImage(wall.image, wall.x, wall.y, wall.width, wall.height)
+    }
+
+    context.fillStyle = 'white';
+    for(let food of foods.values()){
+        context.fillRect(food.x, food.y, food.width, food.height)
     }
 }
 
@@ -142,6 +168,43 @@ class Block{
 
          this.startX = x;
          this.startY = y;
+
+         this.direction = 'R';
+         this.velocityX = 0;
+         this.velocityY = 0;
+
     }
+
+         updateDirection(direction){
+            this.direction = this.direction;
+            this.updateVelocity();
+         }
+
+         updateVelocity(){
+            if(this.direction == 'U'){
+                this.velocityX = 0;
+                this.velocityY = -tileSize/4;
+            }
+            
+            else if(this.direction == 'D'){
+                this.velocityX = 0;
+                this.velocityY = tileSize/4;
+            }
+
+            else if(this.direction == 'L'){
+                this.velocityX = -tileSize/4;
+                this.velocityY = 0;
+
+            }
+
+            else if(this.direction == 'R'){
+                this.velocityX = tileSize/4;
+                this.velocityY = 0;
+
+            }
+
+         }
+
+
 }
 

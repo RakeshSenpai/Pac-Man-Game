@@ -1,7 +1,7 @@
 let board;
 const rowCount = 21;
 const columnCount = 19;
-const tileSize = 24;
+const tileSize = 32;
 const boardWidth = columnCount*tileSize;
 const boardHeight = rowCount*tileSize;
 let context;
@@ -164,6 +164,14 @@ function draw(){
 function move(){
     pacman.x += pacman.velocityX;
     pacman.y += pacman.velocityY;
+
+    for(let wall of walls.values()){
+        if(collision(pacman, wall)){
+            pacman.x -= pacman.velocityX;
+            pacman.y -= pacman.velocityY;
+            break;
+        }
+    }
 }
 
 function movePacman(e){
@@ -179,6 +187,13 @@ function movePacman(e){
     else if(e.code == 'ArrowRight' || e.code == 'KeyD'){
         pacman.updateDirection('R');
     }
+}
+
+function collision(a, b){
+    return a.x < b.x + b.width &&
+           a.x + a.width > b.x &&
+           a.y < b.y + b.height &&
+           a.y + a.height > b.y; 
 }
 
 class Block{

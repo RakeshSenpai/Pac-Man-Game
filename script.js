@@ -215,7 +215,13 @@ class Block{
     }
 
          updateDirection(direction){
+            const prevDirection = this.direction;
             this.direction = direction;
+            this.x += this.velocityX;
+            this.y += this.velocityY;
+            for(let wall of walls.values){
+                
+            }
             this.updateVelocity();
          }
 

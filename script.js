@@ -1,7 +1,7 @@
 let board;
 const rowCount = 21;
 const columnCount = 19;
-const tileSize = 32;
+const tileSize = 24;
 const boardWidth = columnCount*tileSize;
 const boardHeight = rowCount*tileSize;
 let context;
@@ -146,6 +146,7 @@ function update(){
 }
 
 function draw(){
+    context.clearRect(0, 0, board.width, board.height)
     context.drawImage(pacman.image, pacman.x, pacman.y, pacman.width, pacman.height)
     for(let ghost of ghosts.values()){
         context.drawImage(ghost.image, ghost.x, ghost.y, ghost.width, ghost.height)
@@ -161,21 +162,21 @@ function draw(){
 }
 
 function move(){
-    pacman.x += velocityX;
-    pacman.y += velocityY;
+    pacman.x += pacman.velocityX;
+    pacman.y += pacman.velocityY;
 }
 
 function movePacman(e){
-    if(e.code === 'ArrowUp' || e.code === 'KeyW'){
+    if(e.code == 'ArrowUp' || e.code == 'KeyW'){
         pacman.updateDirection('U');
     }
-    else if(e.code === 'ArrowDown' || e.code === 'KeyS'){
+    else if(e.code == 'ArrowDown' || e.code == 'KeyS'){
         pacman.updateDirection('D');
     }
-    else if(e.code === 'ArrowLeft' || e.code === 'KeyA'){
+    else if(e.code == 'ArrowLeft' || e.code == 'KeyA'){
         pacman.updateDirection('L');
     }
-    else if(e.code === 'ArrowRight' || e.code === 'KeyD'){
+    else if(e.code == 'ArrowRight' || e.code == 'KeyD'){
         pacman.updateDirection('R');
     }
 }
@@ -199,7 +200,7 @@ class Block{
     }
 
          updateDirection(direction){
-            this.direction = this.direction;
+            this.direction = direction;
             this.updateVelocity();
          }
 

@@ -17,19 +17,6 @@ let pacmanLeftImage;
 let pacmanRightImage;
 let wallImage;
 
-window.onload = function(){
-    board = document.getElementById("board")
-    board.height = boardHeight;
-    board.width = boardWidth;
-    context = board.getContext("2d")
-
-    laodImages()
-    laodMap()
-    update()
-
-    document.addEventListener('keyup', movePacman)
-    // console.log(walls.size)
-}
 
 
 //X = wall, O = skip, P = pac man, ' ' = food
@@ -64,6 +51,28 @@ const foods = new Set();
 const ghosts = new Set();
 let pacman;
 
+const direction = ['U', 'D', 'L', 'R']//up down left right ghost random movements
+
+window.onload = function(){
+    board = document.getElementById("board")
+    board.height = boardHeight;
+    board.width = boardWidth;
+    context = board.getContext("2d")
+
+    laodImages()
+    laodMap()
+
+    for(let ghost of ghosts.values()){
+        const newDirection = direction[Math.floor(Math.random()*4)];
+        
+    }
+
+
+    update()
+
+    document.addEventListener('keyup', movePacman)
+    // console.log(walls.size)
+}
 
 function laodImages(){
     wallImage = new Image();
@@ -100,9 +109,15 @@ function laodMap(){
         for(let c = 0; c < columnCount; c++){
             const row = tileMap[r]
             const tileMapChar = row[c]
+            // console.log("Here starts Row",row)
+            // console.log( 'Here starts Char',tileMapChar)
 
             const x = c*tileSize;
             const y = r*tileSize;
+            // console.log('This is row', r)
+            // console.log('This is col', c)
+            // console.log('This is x', x)
+            // console.log('This is y', y)
 
             if(tileMapChar == "X"){
                 const wall = new Block(wallImage, x, y, tileSize, tileSize)

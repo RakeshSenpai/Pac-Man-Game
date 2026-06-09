@@ -190,11 +190,16 @@ function move(){
     }
 
     for(let ghost of ghosts.values()){
+
+        if(ghost.y == tileSize*9 && ghost.direction != 'U' && ghost.direction != 'D'){
+            ghost.updateDirection('U')
+        }
+
         ghost.x += ghost.velocityX;
         ghost.y += ghost.velocityY;
 
         for(let wall of walls.values()){
-            if(collision(ghost, wall)){
+            if(collision(ghost, wall) || ghost.x <= 0 || ghost.x + ghost.width >= boardWidth){
                 ghost.x -= ghost.velocityX;
                 ghost.y -= ghost.velocityY;
                 const newDirection = directions[Math.floor(Math.random() * 4)];

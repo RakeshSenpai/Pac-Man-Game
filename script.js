@@ -51,7 +51,7 @@ const foods = new Set();
 const ghosts = new Set();
 let pacman;
 
-const direction = ['U', 'D', 'L', 'R']//up down left right ghost random movements
+const directions = ['U', 'D', 'L', 'R']//up down left right ghost random movements
 
 window.onload = function(){
     board = document.getElementById("board")
@@ -63,8 +63,9 @@ window.onload = function(){
     laodMap()
 
     for(let ghost of ghosts.values()){
-        const newDirection = direction[Math.floor(Math.random()*4)];
-        
+        const newDirection = directions[Math.floor(Math.random()*4)];
+        ghost.updateDirection(newDirection)
+
     }
 
 
@@ -187,6 +188,23 @@ function move(){
             break;
         }
     }
+
+    for(let ghost of ghosts.values()){
+        ghost.x += ghost.velocityX;
+        ghost.y += ghost.velocityY;
+
+        for(let wall of walls.values()){
+            if(collision(ghost, wall)){
+                ghost.x -= ghost.velocityX;
+                ghost.y -= ghost.velocityY;
+                const newDirection = directions[Math.floor(Math.random() * 4)];
+                ghost.updateDirection(newDirection);
+            }
+        }
+
+    }
+
+
 }
 
 // Pacman Moves by pressing keys

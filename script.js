@@ -174,6 +174,8 @@ function move(){
     }
 }
 
+// Pacman Moves by pressing keys
+
 function movePacman(e){
     if(e.code == 'ArrowUp' || e.code == 'KeyW'){
         pacman.updateDirection('U');
@@ -186,6 +188,21 @@ function movePacman(e){
     }
     else if(e.code == 'ArrowRight' || e.code == 'KeyD'){
         pacman.updateDirection('R');
+    }
+
+    // Update Pacman Direction Image
+
+    if(pacman.direction == 'U'){
+        pacman.image = pacmanUpImage;
+    }
+    else if(pacman.direction == 'D'){
+        pacman.image = pacmanDownImage
+    }
+    else if(pacman.direction == 'L'){
+        pacman.image = pacmanLeftImage
+    }
+    else if(pacman.direction == 'R'){
+        pacman.image = pacmanRightImage;
     }
 }
 
@@ -217,12 +234,18 @@ class Block{
          updateDirection(direction){
             const prevDirection = this.direction;
             this.direction = direction;
+            this.updateVelocity();
             this.x += this.velocityX;
             this.y += this.velocityY;
-            for(let wall of walls.values){
-                
+            for(let wall of walls.values()){
+                if(collision(this, wall)){
+                    this.x -= this.velocityX;
+                    this.y -= this.velocityY;
+                    this.direction = prevDirection
+                    this.updateVelocity()
+                    return;
+                }
             }
-            this.updateVelocity();
          }
 
          updateVelocity(){
@@ -251,5 +274,6 @@ class Block{
          }
 
 
-}
+        }
+
 

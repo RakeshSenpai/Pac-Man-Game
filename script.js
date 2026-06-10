@@ -53,6 +53,10 @@ let pacman;
 
 const directions = ['U', 'D', 'L', 'R']//up down left right ghost random movements
 
+let score = 0;
+let lives = 3;
+let gameOver = false;
+
 window.onload = function(){
     board = document.getElementById("board")
     board.height = boardHeight;
@@ -175,6 +179,19 @@ function draw(){
     for(let food of foods.values()){
         context.fillRect(food.x, food.y, food.width, food.height)
     }
+
+
+    // Scores 
+
+    context.fillStyle = 'white';
+    context.font = '14px sans-serif';
+    if(gameOver){
+        context.fillText('Game Over:' , String(score) , tileSize/2, tileSize/2)
+    }
+
+    else{
+        context.fillText('x' + String(lives) + ' ' + String(score) , tileSize/2, tileSize/2);
+    }
 }
 
 function move(){
@@ -190,6 +207,12 @@ function move(){
     }
 
     for(let ghost of ghosts.values()){
+
+        if(collision(ghost, pacman)){
+            lives -= 1;
+            resetPositions();
+        }
+
 
         if(ghost.y == tileSize*9 && ghost.direction != 'U' && ghost.direction != 'D'){
             ghost.updateDirection('U')
@@ -208,6 +231,20 @@ function move(){
         }
 
     }
+
+    // Check food collision..
+
+    let foodEaten = null;
+
+    for(let food of foods.values()){
+        if(collision(pacman, food)){
+            foodEaten = food;
+            score += 10;
+            break;
+        }
+    }
+
+    foods.delete(foodEaten);
 
 
 }

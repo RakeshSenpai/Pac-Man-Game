@@ -1,7 +1,7 @@
 let board;
 const rowCount = 21;
 const columnCount = 19;
-const tileSize = 32;
+const tileSize = 24;
 const boardWidth = columnCount*tileSize;
 const boardHeight = rowCount*tileSize;
 let context;
@@ -160,6 +160,9 @@ function laodMap(){
 
 
 function update(){
+    if(gameOver){
+        return;
+    }
     move();
     draw();
     setTimeout(update, 50)
@@ -186,7 +189,7 @@ function draw(){
     context.fillStyle = 'white';
     context.font = '14px sans-serif';
     if(gameOver){
-        context.fillText('Game Over:' , String(score) , tileSize/2, tileSize/2)
+        context.fillText('Game Over:' + String(score) , tileSize/2, tileSize/2)
     }
 
     else{
@@ -210,6 +213,10 @@ function move(){
 
         if(collision(ghost, pacman)){
             lives -= 1;
+            if(lives == 0){
+                gameOver = true;
+                return;
+            }
             resetPositions();
         }
 
@@ -246,12 +253,29 @@ function move(){
 
     foods.delete(foodEaten);
 
+    if(foods.size == 0){
+        laodMap()
+        resetPositions()
+    }
+
 
 }
 
 // Pacman Moves by pressing keys
 
 function movePacman(e){
+
+    if(gameOver){
+        laodMap();
+        resetPositions();
+        lives = 3;
+        score = 0;
+        gameOver = false;
+        update();
+        return;
+    }
+
+    
     if(e.code == 'ArrowUp' || e.code == 'KeyW'){
         pacman.updateDirection('U');
     }
@@ -286,6 +310,21 @@ function collision(a, b){
            a.x + a.width > b.x &&
            a.y < b.y + b.height &&
            a.y + a.height > b.y; 
+}
+
+
+
+// Reset All Positions
+function resetPositions(){
+    pacman.reset()
+    pacman.velocityX = 0;
+    pacman.velocityY = 0;
+
+    for(let ghost of ghosts.values()){
+        ghost.reset()
+        const newDirection =  directions[Math.floor(Math.random() *4)];
+        ghost.updateDirection(newDirection);
+    }
 }
 
 class Block{
@@ -346,6 +385,11 @@ class Block{
 
             }
 
+         }
+
+         reset(){
+            this.x = this.startX;
+            this.y = this.startY;
          }
 
 
